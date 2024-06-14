@@ -1,0 +1,43 @@
+---
+// Importa la función getCollection de astro:content
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import {Header} from "../../components/Header.tsx";
+import HeaderTop from "../../components/HeaderTop.tsx";
+import Footer from "../../components/Footer.vue";
+import Social from "../../components/Social.svelte";
+// Define una función asíncrona getStaticPaths
+export async function getStaticPaths(){
+    // Usa getCollection para obtener todos los posts de la colección 'tips'
+    const posts = await getCollection('tips')
+
+    // Mapea cada post a un objeto con los parámetros de ruta y las props para esa página
+    return posts.map((post) => ({
+        // Define los parámetros de ruta para la página
+        params: { slug: post.slug },
+        // Pasa todo el post como props a la página
+        props: post,
+        }
+    ))
+}
+
+// Accede a las props de la página
+const post = Astro.props
+
+// Usa la función render del post para obtener el componente Content
+const { Content } = await post.render()
+
+
+---
+<!-- ! Este archivo es para paginas dinamicas, es necesario que esten asi el nombre del archivo y usar la función de getStaticPaths -->
+ <!-- TODO: Podemos más sobre las rutas dinamicas en Astro -->
+<!-- Renderiza el Content que actua como componente
+  -->
+<Base tittle='AstroBuilds.Tips'>
+    <HeaderTop client:load />
+    <Header title='AstroBuilds.Tips'/>
+    <Content />
+    <Footer>
+        <Social />
+    </Footer>
+</Base>

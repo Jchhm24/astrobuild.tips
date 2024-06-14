@@ -1,0 +1,20 @@
+---
+import BaseHeader from '../components/BaseHeader.astro'
+interface Props {
+    tittle: string
+}
+
+const {tittle} = Astro.props
+---
+<!-- ! Plantilla para los archivos MD -->
+<!DOCTYPE html>
+<html lang="es">
+<BaseHeader title='AstroBuild.Tips' description="Tips sobre Astro" canonicalURL="" />
+<body class="bg-slate-900 text-slate-400 ">
+    <div class="flex-block p-4 md:p-8 mx-auto mt-4">
+        <div class="bg-white shadow rounded-lg p-4">
+            <slot/>
+        </div>
+    </div>
+</body>
+</html>

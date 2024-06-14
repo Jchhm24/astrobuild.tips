@@ -1,12 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
-import Header from '../components/header.astro';
-import Hero from '../components/Hero.astro';
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import Header from '../../components/header.astro';
+import Hero from '../../components/Hero.astro';
 
-// TODO: Usando la API de astro, con el *.md se obtienen todos los archivos con extensión .md, se puede hacer lo mismo con otros tipos de archivos 
-const allPosts = await Astro .glob('../content/tips/*.md')
-// El glob siempre debe de recibir una ruta relativa al archivo que se esta ejecutando
+import { getCollection } from 'astro:content';
+
+// Tips es el nombre de la carpeta que contiene los archivos md hay que buscar el nombre de la carpeta en la carpeta content
+const Posts = (await getCollection('tips')).sort(
+    (a,b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+)
 ---
 
 <Layout title="Welcome to Astro.">
@@ -43,15 +46,13 @@ const allPosts = await Astro .glob('../content/tips/*.md')
 		<Hero />
 		<ul role="list" class="link-card-grid">
 			<!-- * Usando los archivos del md -->
-			{allPosts.map((item) =>(
+			{Posts.map((post) =>(
 				<Card
-				title={item?.frontmatter?.title}
-				time ={item?.frontmatter?.pubDate}
-				tags = {item?.frontmatter?.tags}
-				slug = {item?.frontmatter?.slug}
+				title={post.data.title}
+				time ={post.data.pubDate}
+				tags = {post.data.tags}
+                slug = {post.slug}
 			/>
-			// con el ? se valida si el objeto existe para evitar errores y si no existe se retorna un valor por defecto
-			// con el frontmatter se obtiene la información del archivo md
 			))}
 		</ul>
 	</main>
